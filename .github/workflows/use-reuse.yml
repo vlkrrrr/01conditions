@@ -74,6 +74,12 @@ jobs:
     with:
       myinput: dist-files
       mysecondinput: bananasplit
+  print-deploy:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: deploy result
+        run: echo ${{ needs.deploy.outputs.myoutput}}
   report:
     needs: [lint, test, build, deploy]
     runs-on: ubuntu-latest

@@ -11,8 +11,14 @@ on:
             description: The name of the 2nd artifact to deploy 
             required: true
             type: string
+        outputs:
+            myoutput:
+                description: some output
+                value: ${{jobs.deploy.outputs.myresult}}
 jobs:
     deploy:
+        outputs:
+            myresult: ${{steps.outputstep.outputs.myoutput}}
         runs-on: ubuntu-latest
         steps:
           - name: get artifact
@@ -23,3 +29,6 @@ jobs:
             run: ls
           - name: deploying
             run: echo "${{inputs.myinput}} + ${{inputs.mysecondinput}}"
+          - name: setresultoutput
+            id: outputstep
+            run: echo "myoutput=success" >> $GITHUB_OUTPUT
