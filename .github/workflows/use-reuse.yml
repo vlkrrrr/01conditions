@@ -71,6 +71,9 @@ jobs:
   deploy:
     needs: build
     uses: ./.github/workflows/reusable.yml
+    with:
+      myinput: dist-files
+      mysecondinput: bananasplit
   report:
     needs: [lint, test, build, deploy]
     runs-on: ubuntu-latest

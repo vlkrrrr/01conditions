@@ -1,8 +1,25 @@
 name: reuse test
-on: workflow_call
+on: 
+    workflow_call:
+        inputs:
+          myinput:
+            description: The name of the artifact to deploy 
+            required: true
+            default: yolo
+            type: string
+          mysecondinput:
+            description: The name of the 2nd artifact to deploy 
+            required: true
+            type: string
 jobs:
     deploy:
         runs-on: ubuntu-latest
         steps:
+          - name: get artifact
+            uses: actions/download-artifact@v3
+            with:
+                name: ${{inputs.myinput}}
+          - name: listfiles
+            run: ls
           - name: deploying
-            run: echo "deploying code..."
+            run: echo "${{inputs.myinput}} + ${{inputs.mysecondinput}}"
