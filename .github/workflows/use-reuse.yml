@@ -1,8 +1,8 @@
-name: Continue Website Deployment
+name: Website Deployment
 on:
   push:
     branches:
-      - disabled
+      - main
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -39,7 +39,6 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Test code
-        continue-on-error: true
         run: npm run test
       - name: Upload test report
         uses: actions/upload-artifact@v3
@@ -71,16 +70,7 @@ jobs:
           path: dist
   deploy:
     needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: dist-files
-      - name: Output contents
-        run: ls
-      - name: Deploy
-        run: echo "Deploying..."
+    uses: ./.github/workflows/reusable.yml
   report:
     needs: [lint, test, build, deploy]
     runs-on: ubuntu-latest
